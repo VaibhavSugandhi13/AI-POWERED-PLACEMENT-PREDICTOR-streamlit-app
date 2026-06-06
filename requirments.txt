@@ -1,0 +1,12 @@
+streamlit
+pandas
+scikit-learn
+
+# Add the changes to tracking
+git add requirements.txt
+
+# Commit the fix
+git commit -m "Convert requirements.txt from folder to file"
+
+# Push to your GitHub repository
+git push origin main
