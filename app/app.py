@@ -35,21 +35,12 @@ st.divider()
 # =========================
 # LOAD MODEL
 # =========================
-
-
-# =========================
-# LOAD MODEL
-# =========================
-
-# 1. Get the directory where app.py is currently running
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# 2. Setup fallbacks to check for the models directory location
 path_option_1 = os.path.join(BASE_DIR, '..', 'models', 'placement_model.pkl') # Local structure
 path_option_2 = os.path.join(BASE_DIR, 'models', 'placement_model.pkl')      # Cloud deployment fallback
 path_option_3 = os.path.join('models', 'placement_model.pkl')                # Root execution fallback
 
-# 3. Choose whichever path is valid on the active server environment
 if os.path.exists(path_option_1):
     model_path = path_option_1
 elif os.path.exists(path_option_2):
@@ -57,9 +48,9 @@ elif os.path.exists(path_option_2):
 else:
     model_path = path_option_3
 
-# 4. Load the model safely
 with open(model_path, "rb") as f:
     model = pickle.load(f)
+
 # =========================
 # UI CARD STYLE
 # =========================
@@ -133,9 +124,9 @@ with st.container():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-# convert categorical
-extra = 1 if extra == "Yes" else 0
-training = 1 if training == "Yes" else 0
+# Convert categorical features to binary numerical equivalents
+extra_numeric = 1 if extra == "Yes" else 0
+training_numeric = 1 if training == "Yes" else 0
 
 st.divider()
 
@@ -150,21 +141,19 @@ predict = st.button("🚀 Predict Placement", use_container_width=True)
 # PREDICTION
 # =========================
 if predict:
-
-    data = pd.DataFrame([[cgpa, internships, projects, workshops,
-                          aptitude, softskills, extra, training, ssc, hsc]],
-                        columns=[
-                            'CGPA',
-                            'Internships',
-                            'Projects',
-                            'Workshops/Certifications',
-                            'AptitudeTestScore',
-                            'SoftSkillsRating',
-                            'ExtracurricularActivities',
-                            'PlacementTraining',
-                            'SSC_Marks',
-                            'HSC_Marks'
-                        ])
+    # Dictionary format prevents any misaligned feature list order bugs
+    data = pd.DataFrame([{
+        'CGPA': cgpa,
+        'Internships': internships,
+        'Projects': projects,
+        'Workshops/Certifications': workshops,
+        'AptitudeTestScore': aptitude,
+        'SoftSkillsRating': softskills,
+        'ExtracurricularActivities': extra_numeric,
+        'PlacementTraining': training_numeric,
+        'SSC_Marks': ssc,
+        'HSC_Marks': hsc
+    }])
 
     prediction = model.predict(data)
     probability = model.predict_proba(data)[0][1] * 100
