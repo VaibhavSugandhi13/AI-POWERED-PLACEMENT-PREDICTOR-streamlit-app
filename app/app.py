@@ -26,7 +26,7 @@ st.markdown("""
     <p style="color:gray; font-size:16px;">
         Simple, fast & AI-powered placement prediction
     </p>
-    <p style="color:#aaa;">Welcome Vaibhav Sugandhi 👋</p>
+    <p style="color:#aaa;">Welcome by Vaibhav Sugandhi 👋</p>
 </div>
 """, unsafe_allow_html=True)
 
